@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
    // RecyclerView.Adapter adapter;
    NotesAdapter adapter;
     List<Note> notesList;
+    int id, position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,27 +38,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        registerForContextMenu(rvNotes);
+
         initViews();
         loadNotes();
 
-        adapter.setListener(new NotesAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
+        if (notesList.size() != 0) {
+            adapter.setListener(new NotesAdapter.Listener() {
+                @Override
+                public void onClick(int position) {
 
-                Intent intent = new Intent(MainActivity.this, UpdateNoteActivity.class);
-                int positionClick = adapter.getPosition1();
-                Note note = notesList.get(positionClick);
-                String title = note.getTitle();
-                String noteS = note.getNote();
-                int id = note.getId();
-                intent.putExtra("Title", title);
-                intent.putExtra("Note", noteS);
-                intent.putExtra("Id", id);
-                System.out.println("Title: " + title);
-                System.out.println("Note: " + noteS);
-                startActivity(intent);
-            }
-        });
+                    Intent intent = new Intent(MainActivity.this, UpdateNoteActivity.class);
+                    int positionClick = adapter.getPosition1();
+                    Note note = notesList.get(positionClick);
+                    String title = note.getTitle();
+                    String noteS = note.getNote();
+                    id = note.getId();
+                    intent.putExtra("Title", title);
+                    intent.putExtra("Note", noteS);
+                    intent.putExtra("Id", id);
+                    System.out.println("Title: " + title);
+                    System.out.println("Note: " + noteS);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override
@@ -80,6 +85,26 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//
+//        getMenuInflater().inflate(R.menu.menu_delete, menu);
+//    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        position = adapter.getPosition1();
+        System.out.println(position);
+        Note note = notesList.get(position);
+        NoteDatabase db = new NoteDatabase(this);
+        db.deleteNote(note);
+        db.close();
+        notesList.remove(position);
+        adapter.notifyDataSetChanged();
+        return super.onContextItemSelected(item);
     }
 
     private void initViews() {

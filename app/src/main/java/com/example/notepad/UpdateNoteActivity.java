@@ -79,7 +79,7 @@ public class UpdateNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteNote () {
+    private void deleteNote () {
         Note note = new Note(id);
         NoteDatabase db = new NoteDatabase(this);
         db.deleteNote(note);
