@@ -10,6 +10,10 @@ public class Note {
 
     }
 
+    public Note (int id) {
+        this.id = id;
+    }
+
     public Note (int id, String title, String note) {
         this.id = id;
         this.title = title;

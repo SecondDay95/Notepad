@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.notepad.MainActivity">
+
+
+    <item
+        android:id="@+id/backgound_color"
+        android:title="Background color"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/text_color"
+        android:title="Text color"
+        app:showAsAction="never" />
+
+
+
+
+
+
+</menu>

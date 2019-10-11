@@ -62,6 +62,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
             Intent i = new Intent(AddNoteActivity.this,MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
 
         }

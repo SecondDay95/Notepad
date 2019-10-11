@@ -1,11 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.notepad.MainActivity">
+    tools:context="com.example.notepad.UpdateNoteActivity">
+
     <item
         android:id="@+id/action_save"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_accept"
         android:title="Save"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="99"
+        android:icon="@drawable/ic_action_discard"
+        android:title="Delete"
+        app:showAsAction="always"/>
+
 </menu>

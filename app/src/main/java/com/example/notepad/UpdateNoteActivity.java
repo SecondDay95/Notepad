@@ -34,7 +34,7 @@ public class UpdateNoteActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_save_delete, menu);
         return true;
     }
 
@@ -48,6 +48,10 @@ public class UpdateNoteActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
             updateNote();
+        }
+
+        if (id == R.id.action_delete) {
+            deleteNote();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -69,8 +73,22 @@ public class UpdateNoteActivity extends AppCompatActivity {
             db.close();
 
             Intent intent = new Intent(UpdateNoteActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
+    }
+
+    public void deleteNote () {
+        Note note = new Note(id);
+        NoteDatabase db = new NoteDatabase(this);
+        db.deleteNote(note);
+        db.close();
+
+        Intent intent = new Intent(UpdateNoteActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public String getTitle1() {
