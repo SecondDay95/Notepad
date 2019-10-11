@@ -16,7 +16,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView rvNotes;
-    RecyclerView.Adapter adapter;
+   // RecyclerView.Adapter adapter;
+   NotesAdapter adapter;
     List<Note> notesList;
 
     @Override
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         rvNotes = (RecyclerView) findViewById(R.id.recycler);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +39,25 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         loadNotes();
+
+        adapter.setListener(new NotesAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+
+                Intent intent = new Intent(MainActivity.this, UpdateNoteActivity.class);
+                int positionClick = adapter.getPosition1();
+                Note note = notesList.get(positionClick);
+                String title = note.getTitle();
+                String noteS = note.getNote();
+                int id = note.getId();
+                intent.putExtra("Title", title);
+                intent.putExtra("Note", noteS);
+                intent.putExtra("Id", id);
+                System.out.println("Title: " + title);
+                System.out.println("Note: " + noteS);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

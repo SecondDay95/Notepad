@@ -17,6 +17,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     Context context;
     List<Note> noteList = new ArrayList<>();
     Listener listener;
+    int position1;
 
     public NotesAdapter () {
 
@@ -53,6 +54,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             @Override
             public void onClick(View v) {
                 if (listener != null) {
+                    position1 = position;
                     listener.onClick(position);
                 }
             }
@@ -76,5 +78,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             cardView = itemView;
 
         }
+    }
+
+    public int getPosition1() {
+        return position1;
     }
 }

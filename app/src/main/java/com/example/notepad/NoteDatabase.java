@@ -102,9 +102,25 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
     }
 
-    public void deleteNote () {
+    public void updateNote (Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
-        NotesAdapter notesAdapter = new NotesAdapter();
-        int position = notesAdapter.position1;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_TITLE, note.getTitle());
+        contentValues.put(KEY_NOTE, note.getNote());
+        //UpdateNoteActivity updateNoteActivity = new UpdateNoteActivity();
+        MainActivity mainActivity = new MainActivity();
+        System.out.println("String id = " + note.getId());
+
+        db.update(TABLE_NAME, contentValues,KEY_ID + "=?" ,
+                new String[]{String.valueOf(note.getId())});
+        db.close();
+    }
+
+    public void deleteNote (Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //UpdateNoteActivity updateNoteActivity = new UpdateNoteActivity();
+        MainActivity mainActivity = new MainActivity();
+        db.delete(TABLE_NAME, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
+
     }
 }
