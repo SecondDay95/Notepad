@@ -1,9 +1,14 @@
 package com.example.notepad;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
    NotesAdapter adapter;
     List<Note> notesList;
     int id, position;
+    private SharedPreferences sharedPreferences, sharedPreferences1, sharedPreferences2;
+    private SharedPreferences.Editor editor;
+    private String color, notesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        sharedPreferences = MainActivity.this.getSharedPreferences("Color", Context.MODE_PRIVATE);
+        color = sharedPreferences.getString("ChooseColor", "Black");
+        if (notesList.size() != 0) {
+            if (color.equals("Black")) {
+                rvNotes.setBackgroundColor(this.getResources().getColor(R.color.colorBlack, null));
+            } else if (color.equals("Red")) {
+                rvNotes.setBackgroundColor(this.getResources().getColor(R.color.colorRed, null));
+            } else if (color.equals("Green")) {
+                rvNotes.setBackgroundColor(this.getResources().getColor(R.color.colorGreen, null));
+            } else if (color.equals("Blue")) {
+                rvNotes.setBackgroundColor(this.getResources().getColor(R.color.colorBlue, null));
+            } else if (color.equals("Gray")) {
+                rvNotes.setBackgroundColor(this.getResources().getColor(R.color.colorGray, null));
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -80,9 +110,28 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_save) {
-//            return true;
-//        }
+        if (id == R.id.backgound_color) {
+            Intent intent = new Intent(MainActivity.this, ChangeColorActivity.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.notes_view_grid) {
+            sharedPreferences1 = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+            editor = sharedPreferences1.edit();
+            editor.clear();
+            editor.putString("View", "Grid_View");
+            editor.commit();
+            initViews();
+        }
+
+        if (id == R.id.notes_view_list) {
+            sharedPreferences1 = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+            editor = sharedPreferences1.edit();
+            editor.clear();
+            editor.putString("View", "List_View");
+            editor.commit();
+            initViews();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -108,9 +157,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        sharedPreferences2 = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        notesView = sharedPreferences2.getString("View", "Grid_View");
 
-        rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL));
+        if (notesView.equals("Grid_View")) {
+            rvNotes.setLayoutManager(new StaggeredGridLayoutManager(2,
+                    StaggeredGridLayoutManager.VERTICAL));
+        }
+        else {
+            rvNotes.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     private void loadNotes() {

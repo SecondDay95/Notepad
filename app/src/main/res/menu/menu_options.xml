@@ -11,10 +11,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/text_color"
-        android:title="Text color"
+        android:id="@+id/notes_view_grid"
+        android:title="Grid Notes View"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/notes_view_list"
+        android:title="List Notes View"
+        app:showAsAction="never" />
 
 
 

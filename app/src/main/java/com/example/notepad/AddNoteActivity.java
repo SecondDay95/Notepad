@@ -3,9 +3,12 @@ package com.example.notepad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -15,6 +18,7 @@ import java.util.Date;
 public class AddNoteActivity extends AppCompatActivity {
 
     EditText etTitle, etNote;
+    TextView tv_TextWathcer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,31 @@ public class AddNoteActivity extends AppCompatActivity {
 
         etTitle = (EditText) findViewById(R.id.etTitle);
         etNote = (EditText) findViewById(R.id.etNote);
+        tv_TextWathcer = (TextView) findViewById(R.id.tv_textWatcher);
+        String dateS = prepareDate();
+        tv_TextWathcer.setText(dateS);
+
+        final TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                String dateS = prepareDate();
+                tv_TextWathcer.setText(dateS + " | Characters: " + String.valueOf(s.length()));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        etNote.addTextChangedListener(textWatcher);
     }
 
     @Override
@@ -54,10 +83,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
         String title = etTitle.getText().toString();
         String note_text = etNote.getText().toString();
-        long date_ms = System.currentTimeMillis();
-        Date date = new Date(date_ms);
-        DateFormat dateFormat = new SimpleDateFormat("dd:MM:YYYY, HH:mm");
-        String dateS = dateFormat.format(date).toString();
+
+        String dateS = prepareDate();
         System.out.println("Date: " + dateS);
 
         if(title.equals("") || note_text.equals("")){
@@ -77,6 +104,15 @@ public class AddNoteActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private String prepareDate() {
+
+        long date_ms = System.currentTimeMillis();
+        Date date = new Date(date_ms);
+        DateFormat dateFormat = new SimpleDateFormat("dd:MM:YYYY, HH:mm");
+        String dateS = dateFormat.format(date).toString();
+        return dateS;
     }
 
 

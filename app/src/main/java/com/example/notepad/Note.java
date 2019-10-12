@@ -21,6 +21,13 @@ public class Note {
         this.note = note;
     }
 
+    public Note (int id, String title, String note, String date) {
+        this.id = id;
+        this.title = title;
+        this.note = note;
+        this.date = date;
+    }
+
     public Note (String title, String note, String date) {
         this.title = title;
         this.note = note;

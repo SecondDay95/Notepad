@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Notepad</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="list_of_colors">
+        <item>Black</item>
+        <item>Red</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Gray</item>
+    </string-array>
 </resources>

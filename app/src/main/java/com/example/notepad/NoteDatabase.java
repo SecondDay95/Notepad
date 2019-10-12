@@ -113,6 +113,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TITLE, note.getTitle());
         contentValues.put(KEY_NOTE, note.getNote());
+        contentValues.put(KEY_DATE, note.getDate());
         //UpdateNoteActivity updateNoteActivity = new UpdateNoteActivity();
         MainActivity mainActivity = new MainActivity();
         System.out.println("String id = " + note.getId());

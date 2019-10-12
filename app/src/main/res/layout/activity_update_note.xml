@@ -14,7 +14,17 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:inputType="textAutoComplete"
         android:hint="Please enter a title of note"/>
+
+    <TextView
+        android:id="@+id/tv_textWatcherUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date and number of characters"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="5dp"
+        android:textColor="#D4AF37"/>
 
     <EditText
         android:id="@+id/etNoteChange"
@@ -23,6 +33,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:gravity="start"
+        android:inputType="textMultiLine"
         android:hint="Please enter a title of note"/>
 
 </LinearLayout>

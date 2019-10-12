@@ -3,14 +3,22 @@ package com.example.notepad;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UpdateNoteActivity extends AppCompatActivity {
 
     EditText etTitleChange, etNoteChange;
+    TextView tv_WatcherUpdate;
     String title, note;
     int id;
 
@@ -21,6 +29,7 @@ public class UpdateNoteActivity extends AppCompatActivity {
 
         etTitleChange = (EditText) findViewById(R.id.etTitleChange);
         etNoteChange = (EditText) findViewById(R.id.etNoteChange);
+        tv_WatcherUpdate = (TextView) findViewById(R.id.tv_textWatcherUpdate);
 
         Intent intent = getIntent();
         title = intent.getStringExtra("Title");
@@ -30,6 +39,30 @@ public class UpdateNoteActivity extends AppCompatActivity {
 
         etTitleChange.setText(title);
         etNoteChange.setText(note);
+        String dateS = prepareDate();
+        tv_WatcherUpdate.setText(dateS + " | Characters: " + String.valueOf(note.length()));
+
+        final TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                String dateS = prepareDate();
+                tv_WatcherUpdate.setText(dateS + " | Characters: " + String.valueOf(s.length()));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        etNoteChange.addTextChangedListener(textWatcher);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,7 +100,8 @@ public class UpdateNoteActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
         else {
-            Note note = new Note(id, titleUpdated, noteUpdated);
+            String dateS = prepareDate();
+            Note note = new Note(id, titleUpdated, noteUpdated, dateS);
             NoteDatabase db = new NoteDatabase(this);
             db.updateNote(note);
             db.close();
@@ -97,5 +131,13 @@ public class UpdateNoteActivity extends AppCompatActivity {
 
     public int getId() {
         return id;
+    }
+
+    private String prepareDate() {
+        long date_ms = System.currentTimeMillis();
+        Date date = new Date(date_ms);
+        DateFormat dateFormat = new SimpleDateFormat("dd:MM:YYYY, HH:mm");
+        String dateS = dateFormat.format(date).toString();
+        return dateS;
     }
 }
