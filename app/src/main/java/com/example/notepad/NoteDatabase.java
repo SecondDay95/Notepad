@@ -19,9 +19,10 @@ public class NoteDatabase extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_TITLE = "title";
     private static final String KEY_NOTE = "note";
+    private static final String KEY_DATE = "date";
 
     // Coloumn Combinations
-    private static final String[] COLS_ID_TITLE_NOTE = new String[] {KEY_ID,KEY_TITLE,KEY_NOTE};
+    private static final String[] COLS_ID_TITLE_NOTE_DATE = new String[] {KEY_ID,KEY_TITLE,KEY_NOTE, KEY_DATE};
 
     public NoteDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,7 +35,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
         String CREATE_NOTES_TABLE = "CREATE TABLE " + TABLE_NAME + " ( "
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT"+", "
                 + KEY_TITLE + " TEXT NOT NULL"+ ", "
-                + KEY_NOTE + " TEXT"
+                + KEY_NOTE + " TEXT" + ", "
+                + KEY_DATE + " TEXT"
                 + ")";
 
         db.execSQL(CREATE_NOTES_TABLE);
@@ -56,6 +58,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_TITLE, note.getTitle());
         values.put(KEY_NOTE, note.getNote());
+        //values.put(KEY_DATE, System.currentTimeMillis());
+        values.put(KEY_DATE, note.getDate());
 
 
         db.insert(TABLE_NAME,null,values);
@@ -65,7 +69,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public Note getNote(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.query(TABLE_NAME,COLS_ID_TITLE_NOTE,KEY_ID +"=?",new String[]{String.valueOf(id)},null,null,null,null);
+        Cursor c = db.query(TABLE_NAME,COLS_ID_TITLE_NOTE_DATE,KEY_ID +"=?",new String[]{String.valueOf(id)},null,null,null,null);
         if(c != null){
             c.moveToFirst();
         }
@@ -80,7 +84,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
 
         List<Note> noteList = new ArrayList<>();
 
-        Cursor cursor = db.query(TABLE_NAME,COLS_ID_TITLE_NOTE,null,null,
+        Cursor cursor = db.query(TABLE_NAME,COLS_ID_TITLE_NOTE_DATE,null,null,
                 null,null,null);
 
 
@@ -91,6 +95,8 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 note.setId(Integer.parseInt(cursor.getString(0)));
                 note.setTitle(cursor.getString(1));
                 note.setNote(cursor.getString(2));
+                note.setDate(cursor.getString(3));
+                System.out.println("cursor.getString(3) = " + cursor.getString(3));
                 noteList.add(note);
 
             }while (cursor.moveToNext());

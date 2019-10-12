@@ -50,6 +50,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
     public void onBindViewHolder(@NonNull final NotesViewHolder notesViewHolder, final int position) {
         notesViewHolder.tvTitle.setText(noteList.get(position).getTitle());
         notesViewHolder.tvNote.setText(noteList.get(position).getNote());
+
+        notesViewHolder.tvDate.setText(noteList.get(position).getDate());
         CardView cardView = notesViewHolder.cardView;
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,13 +78,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     public class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
-        TextView tvTitle,tvNote;
+        TextView tvTitle,tvNote, tvDate;
         CardView cardView;
         public NotesViewHolder(CardView itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.info_text);
             tvNote = itemView.findViewById(R.id.description_text);
+            tvDate = itemView.findViewById(R.id.date_text);
             cardView = itemView;
             itemView.setOnCreateContextMenuListener(this);
 

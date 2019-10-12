@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AddNoteActivity extends AppCompatActivity {
 
     EditText etTitle, etNote;
@@ -50,13 +54,19 @@ public class AddNoteActivity extends AppCompatActivity {
 
         String title = etTitle.getText().toString();
         String note_text = etNote.getText().toString();
+        long date_ms = System.currentTimeMillis();
+        Date date = new Date(date_ms);
+        DateFormat dateFormat = new SimpleDateFormat("dd:MM:YYYY, HH:mm");
+        String dateS = dateFormat.format(date).toString();
+        System.out.println("Date: " + dateS);
 
         if(title.equals("") || note_text.equals("")){
             Toast.makeText(this, "Please fill all the fields before saving",
                     Toast.LENGTH_SHORT).show();
         }else{
             NoteDatabase db = new NoteDatabase(this);
-            Note note = new Note(title,note_text);
+            //db.onUpgrade(db.getWritableDatabase(), 3, 4);
+            Note note = new Note(title,note_text, dateS);
             db.addNote(note);
             db.close();
 

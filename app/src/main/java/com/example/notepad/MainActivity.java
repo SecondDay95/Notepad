@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         if (notesList.size() != 0) {
             adapter = new NotesAdapter(this, notesList);
             rvNotes.setAdapter(adapter);
+            System.out.println("Date: " + notesList.get(0).getDate());
         }
     }
 }
