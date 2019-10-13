@@ -1,6 +1,7 @@
 package com.example.notepad;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -19,6 +20,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
     EditText etTitle, etNote;
     TextView tv_TextWathcer;
+    String title;
+    String note_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,36 +77,25 @@ public class AddNoteActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            saveNote();
+            new MyTask().execute();
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void saveNote(){
 
-        String title = etTitle.getText().toString();
-        String note_text = etNote.getText().toString();
+        title = etTitle.getText().toString();
+        note_text = etNote.getText().toString();
 
         String dateS = prepareDate();
         System.out.println("Date: " + dateS);
-
-        if(title.equals("") || note_text.equals("")){
-            Toast.makeText(this, "Please fill all the fields before saving",
-                    Toast.LENGTH_SHORT).show();
-        }else{
+        if (!title.equals("") || !note_text.equals("")) {
             NoteDatabase db = new NoteDatabase(this);
             //db.onUpgrade(db.getWritableDatabase(), 3, 4);
-            Note note = new Note(title,note_text, dateS);
+            Note note = new Note(title, note_text, dateS);
             db.addNote(note);
             db.close();
-
-            Intent i = new Intent(AddNoteActivity.this,MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-
         }
-
     }
 
     private String prepareDate() {
@@ -113,6 +105,30 @@ public class AddNoteActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("dd:MM:YYYY, HH:mm");
         String dateS = dateFormat.format(date).toString();
         return dateS;
+    }
+
+    protected class MyTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            saveNote();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(title.equals("") || note_text.equals("")){
+                Toast.makeText(AddNoteActivity.this, "Please fill all the fields before saving",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Intent i = new Intent(AddNoteActivity.this,MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
+        }
     }
 
 

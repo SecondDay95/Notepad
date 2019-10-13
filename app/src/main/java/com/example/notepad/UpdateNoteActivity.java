@@ -1,6 +1,7 @@
 package com.example.notepad;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -20,6 +21,7 @@ public class UpdateNoteActivity extends AppCompatActivity {
     EditText etTitleChange, etNoteChange;
     TextView tv_WatcherUpdate;
     String title, note;
+    String titleUpdated, noteUpdated;
     int id;
 
     @Override
@@ -80,36 +82,28 @@ public class UpdateNoteActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_save) {
-            updateNote();
+            new MyTask().execute();
         }
 
         if (id == R.id.action_delete) {
-            deleteNote();
+            new MyTask1().execute();
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void updateNote () {
-        String titleUpdated, noteUpdated;
-
         titleUpdated = etTitleChange.getText().toString();
         noteUpdated = etNoteChange.getText().toString();
 
-        if (titleUpdated.equals("") || noteUpdated.equals("")) {
-            Toast.makeText(UpdateNoteActivity.this, "Please enter all fields",
-                    Toast.LENGTH_SHORT).show();
-        }
-        else {
+        if (!titleUpdated.equals("") || !noteUpdated.equals("")) {
+
             String dateS = prepareDate();
             Note note = new Note(id, titleUpdated, noteUpdated, dateS);
             NoteDatabase db = new NoteDatabase(this);
-            db.updateNote(note);
+            //db.updateNote(note);
+            db.deleteNote(note);
+            db.addNote(note);
             db.close();
-
-            Intent intent = new Intent(UpdateNoteActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
         }
     }
 
@@ -139,5 +133,37 @@ public class UpdateNoteActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("dd:MM:YYYY, HH:mm");
         String dateS = dateFormat.format(date).toString();
         return dateS;
+    }
+
+    protected class MyTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            updateNote();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (titleUpdated.equals("") || noteUpdated.equals("")) {
+                Toast.makeText(UpdateNoteActivity.this, "Please enter all fields",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Intent intent = new Intent(UpdateNoteActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+            super.onPostExecute(aVoid);
+        }
+    }
+    protected class MyTask1 extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            deleteNote();
+            return null;
+        }
     }
 }

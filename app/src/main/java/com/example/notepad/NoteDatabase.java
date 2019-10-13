@@ -126,7 +126,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
     public void deleteNote (Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
         //UpdateNoteActivity updateNoteActivity = new UpdateNoteActivity();
-        MainActivity mainActivity = new MainActivity();
+//        MainActivity mainActivity = new MainActivity();
         db.delete(TABLE_NAME, KEY_ID + "=?", new String[]{String.valueOf(note.getId())});
         db.close();
 

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
         notesList = db.getAllNotes();
         if (notesList.size() != 0) {
+            Collections.reverse(notesList);
             adapter = new NotesAdapter(this, notesList);
             rvNotes.setAdapter(adapter);
             System.out.println("Date: " + notesList.get(0).getDate());
