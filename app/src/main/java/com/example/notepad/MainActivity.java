@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         loadNotes();
+        System.out.println("Size " + notesList.size());
 
         if (notesList.size() != 0) {
             adapter.setListener(new NotesAdapter.Listener() {
